@@ -1,0 +1,13 @@
+{
+  "name": "k6-sample",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "workspaces": [
+    "./dice-roll",
+    "load-gen"
+  ]
+}
