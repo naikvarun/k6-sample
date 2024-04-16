@@ -3,20 +3,12 @@ volumes:
   prometheus:
   tempo:
 services:
-  otel-collector:
-    container_name: otel-collector
-    image: otel/opentelemetry-collector-contrib
-    volumes:
-      - "./docker/otel-collector.config.yml:/etc/otelcol-contrib/config.yaml"
-    ports:
-      - 4317:4317
-      - 4318:4318
   maildev:
     container_name: maildev
     image: maildev/maildev
     ports:
-      - "1025:1025"
-      - "1080:1080"
+      - '1025:1025'
+      - '1080:1080'
   prometheus:
     container_name: prometheus
     image: prom/prometheus # https://hub.docker.com/r/prom/prometheus
@@ -34,16 +26,16 @@ services:
     container_name: grafana
     image: grafana/grafana # https://hub.docker.com/r/grafana/grafana/tags
     environment:
-        - GF_AUTH_ANONYMOUS_ENABLED=true
-        - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
-        - GF_AUTH_DISABLE_LOGIN_FORM=true
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
     volumes:
-        - ./docker/grafana/grafana.ini:/etc/grafana/grafana.ini:ro
-        - ./docker/grafana/datasources:/etc/grafana/provisioning/datasources:ro
-#        - ./docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
-#        - ./docker/grafana/provisioning/alerting:/etc/grafana/provisioning/alerting:ro
+      - ./docker/grafana/grafana.ini:/etc/grafana/grafana.ini:ro
+      - ./docker/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    #        - ./docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+    #        - ./docker/grafana/provisioning/alerting:/etc/grafana/provisioning/alerting:ro
     ports:
-        - 3000:3000
+      - 3000:3000
   loki:
     container_name: loki
     image: grafana/loki:3.0.0 # https://hub.docker.com/r/grafana/loki/tags and https://github.com/grafana/loki/releases
@@ -58,5 +50,6 @@ services:
       - tempo:/var/tempo
       - ./docker/grafana/tempo.yml:/etc/tempo.yml:ro
     ports:
-      - 3200:3200    # tempo
-    #  - 4317:4317    # otlp
+      - 3200:3200 # tempo
+      - 4317:4317 # otlp
+      - 4318:4318 # otlp

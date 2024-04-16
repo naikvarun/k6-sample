@@ -1,24 +1,46 @@
-/*instrumentation.ts*/
-import { NodeSDK } from '@opentelemetry/sdk-node';
-import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-node';
-import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
+import opentelemetry from '@opentelemetry/api';
+
+import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
+import { Resource } from '@opentelemetry/resources';
 import {
-  PeriodicExportingMetricReader,
-  ConsoleMetricExporter,
-} from '@opentelemetry/sdk-metrics';
+  SEMRESATTRS_SERVICE_NAME,
+  SEMRESATTRS_SERVICE_VERSION,
+} from '@opentelemetry/semantic-conventions';
+import { registerInstrumentations } from '@opentelemetry/instrumentation';
+import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
+import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto';
-import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-proto';
+import { ZipkinExporter } from '@opentelemetry/exporter-zipkin';
+import {
+  Sampler,
+  AlwaysOnSampler,
+  SimpleSpanProcessor,
+} from '@opentelemetry/sdk-trace-base';
 
-const sdk = new NodeSDK({
-  traceExporter: new OTLPTraceExporter({
-    url: 'temp:4317'
-  }),
-  metricReader: new PeriodicExportingMetricReader({
-    exporter: new OTLPMetricExporter({
-        
+const Exporter = (process.env.EXPORTER || '').toLowerCase().startsWith('z')
+  ? ZipkinExporter
+  : OTLPTraceExporter;
+export function setupTracing(serviceName: string, serviceVersion: string) {
+  const provider = new NodeTracerProvider({
+    resource: new Resource({
+      [SEMRESATTRS_SERVICE_NAME]: serviceName,
+      [SEMRESATTRS_SERVICE_VERSION]: serviceVersion,
     }),
-  }),
-  instrumentations: [getNodeAutoInstrumentations()],
-});
+    // sampler: filterSampler(ignoreHealthCheck, new AlwaysOnSampler()),
+  });
+  registerInstrumentations({
+    tracerProvider: provider,
+    instrumentations: [new HttpInstrumentation(), new ExpressInstrumentation()],
+  });
 
-sdk.start();
+  const exporter = new Exporter({
+    serviceName,
+  });
+
+  provider.addSpanProcessor(new SimpleSpanProcessor(exporter));
+
+  // Initialize the OpenTelemetry APIs to use the NodeTracerProvider bindings
+  provider.register();
+
+  return opentelemetry.trace.getTracer(serviceName);
+}

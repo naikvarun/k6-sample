@@ -12,6 +12,11 @@ exporters:
     endpoint: tempo:4317
     tls:
       insecure: true
+  prometheus:
+    endpoint: 'host.docker.internal:9090'
+    send_timestamps: true
+    resource_to_telemetry_conversion:
+      enabled: true
 
 processors:
   batch:
@@ -25,7 +30,7 @@ service:
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp, logging]
+      exporters: [logging]
     logs:
       receivers: [otlp]
       processors: [batch]
