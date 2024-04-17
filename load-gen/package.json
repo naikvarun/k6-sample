@@ -5,7 +5,8 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "start": "k6 run script.js"
+    "start": "k6 run script.js",
+    "load:water": "k6 run water-service.js"
   },
   "keywords": [],
   "author": "",
