@@ -6,7 +6,7 @@ export const options = {
   // A number specifying the number of VUs to run concurrently.
   vus: 10,
   // A string specifying the total duration of the test run.
-  duration: '30s',
+  duration: '5m',
 
   // The following section contains configuration options for execution of this
   // test script in Grafana Cloud.
@@ -54,23 +54,22 @@ export const options = {
 // See https://grafana.com/docs/k6/latest/examples/get-started-with-k6/ to learn more
 // about authoring k6 scripts.
 //
-export default function() {
+export default function () {
   const tea = getTeaQuery();
-  const url = new URL('http://localhost:8080/rolldice')
-  url.searchParams.append('tea', tea)
+  const url = new URL('http://localhost:8080/rolldice');
+  url.searchParams.append('tea', tea);
   http.get(url.toString());
-  sleep(getSleep())
-
+  sleep(getSleep());
 }
 
 function getTeaQuery() {
   const rand = Math.random();
-  if (rand < 0.1) return "english breakfast";
-        else if (rand < 0.7) return "sencha";
-        else if (rand < 0.9) return "da hong pao";
-        else return "gyokuro";
+  if (rand < 0.1) return 'english breakfast';
+  else if (rand < 0.7) return 'sencha';
+  else if (rand < 0.9) return 'da hong pao';
+  else return 'gyokuro';
 }
 
 function getSleep() {
-  return Math.floor( Math.random()* (2.0-0.5+1)  ) + 0.5
+  return Math.floor(Math.random() * (2.0 - 0.5 + 1)) + 0.5;
 }

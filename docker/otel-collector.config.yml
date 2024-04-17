@@ -6,32 +6,37 @@ receivers:
       http:
         endpoint: 0.0.0.0:4318
 exporters:
-  logging:
-    loglevel: debug
+  debug:
+    verbosity: detailed
   otlp:
     endpoint: tempo:4317
     tls:
       insecure: true
   prometheus:
-    endpoint: 'host.docker.internal:9090'
-    send_timestamps: true
-    resource_to_telemetry_conversion:
-      enabled: true
+    endpoint: '0.0.0.0:8889'
+    const_labels:
+      exp: otlp
+
+extensions:
+  health_check:
+  pprof:
+  zpages:
 
 processors:
   batch:
 
 service:
+  extensions: [health_check, pprof, zpages]
   pipelines:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp, logging]
+      exporters: [otlp]
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging]
+      exporters: [debug, prometheus]
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp, logging]
+      exporters: [otlp, debug]

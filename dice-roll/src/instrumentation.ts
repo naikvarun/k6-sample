@@ -1,5 +1,5 @@
 import opentelemetry from '@opentelemetry/api';
-
+import process from 'process';
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
 import { Resource } from '@opentelemetry/resources';
 import {
@@ -9,28 +9,34 @@ import {
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { ZipkinExporter } from '@opentelemetry/exporter-zipkin';
 import {
   Sampler,
   AlwaysOnSampler,
   SimpleSpanProcessor,
 } from '@opentelemetry/sdk-trace-base';
-
+import {
+  PeriodicExportingMetricReader,
+  MeterProvider,
+} from '@opentelemetry/sdk-metrics';
+import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
+import { PrometheusExporter } from '@opentelemetry/exporter-prometheus';
+import { NodeSDK } from '@opentelemetry/sdk-node';
+import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 const Exporter = (process.env.EXPORTER || '').toLowerCase().startsWith('z')
   ? ZipkinExporter
   : OTLPTraceExporter;
+
 export function setupTracing(serviceName: string, serviceVersion: string) {
-  const provider = new NodeTracerProvider({
-    resource: new Resource({
-      [SEMRESATTRS_SERVICE_NAME]: serviceName,
-      [SEMRESATTRS_SERVICE_VERSION]: serviceVersion,
-    }),
-    // sampler: filterSampler(ignoreHealthCheck, new AlwaysOnSampler()),
+  const resource = new Resource({
+    [SEMRESATTRS_SERVICE_NAME]: serviceName,
+    [SEMRESATTRS_SERVICE_VERSION]: serviceVersion,
   });
-  registerInstrumentations({
-    tracerProvider: provider,
-    instrumentations: [new HttpInstrumentation(), new ExpressInstrumentation()],
+
+  const provider = new NodeTracerProvider({
+    resource,
+    // sampler: filterSampler(ignoreHealthCheck, new AlwaysOnSampler()),
   });
 
   const exporter = new Exporter({
@@ -40,7 +46,37 @@ export function setupTracing(serviceName: string, serviceVersion: string) {
   provider.addSpanProcessor(new SimpleSpanProcessor(exporter));
 
   // Initialize the OpenTelemetry APIs to use the NodeTracerProvider bindings
-  provider.register();
+  // provider.register();
+
+  const metricReader = new PeriodicExportingMetricReader({
+    exporter: new OTLPMetricExporter(),
+
+    // Default is 60000ms (60 seconds). Set to 10 seconds for demonstrative purposes only.
+    exportIntervalMillis: 10000,
+  });
+
+  const sdk = new NodeSDK({
+    resource,
+    metricReader,
+    traceExporter: exporter,
+    instrumentations: [
+      getNodeAutoInstrumentations(),
+      // new HttpInstrumentation(),
+      // new ExpressInstrumentation(),
+    ],
+  });
+
+  sdk.start();
+
+  process.on('SIGTERM', () => {
+    sdk
+      .shutdown()
+      .then(
+        () => console.log('SDK shut down successfully'),
+        (err) => console.log('Error shutting down SDK', err)
+      )
+      .finally(() => process.exit(0));
+  });
 
   return opentelemetry.trace.getTracer(serviceName);
 }

@@ -1,1 +1,5 @@
 GET http://localhost:8080/rolldice?tea=earlgrey
+
+###
+
+GET http://localhost:8080/metric
