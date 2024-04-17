@@ -44,7 +44,7 @@ services:
       - GF_AUTH_DISABLE_LOGIN_FORM=true
     volumes:
       - ./docker/grafana/grafana.ini:/etc/grafana/grafana.ini:ro
-      - ./docker/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./docker/grafana/datasources:/etc/grafana/provisioning/datasources
     #        - ./docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
     #        - ./docker/grafana/provisioning/alerting:/etc/grafana/provisioning/alerting:ro
     ports:

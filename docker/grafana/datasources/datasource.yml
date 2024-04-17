@@ -25,3 +25,17 @@ datasources:
       httpMethod: GET
       serviceMap:
         datasourceUid: 'prometheus'
+    tracesToLogs:
+      datasourceUid: loki
+      mappedTags: []
+      mapTagNamesEnabled: true
+      filterByTraceID: true
+      filterBySpanID: false
+      spanStartTimeShift: '-10m'
+      spanEndTimeShift: '10m'
+    lokiSearch:
+      datasourceUid: loki
+    serviceMap:
+      datasourceUid: prometheus
+    nodeGraph:
+      enabled: true

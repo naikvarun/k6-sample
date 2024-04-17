@@ -1,0 +1,9 @@
+
+GET http://localhost:8092/api/water
+
+###
+
+GET http://localhost:8092/api/water/1
+###
+
+GET http://localhost:8092/api/water/search/findBySize?size=smallx

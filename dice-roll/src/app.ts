@@ -1,12 +1,12 @@
 /*app.ts*/
-import { getRandomNumber } from './dice';
 import { setupTracing } from './instrumentation';
+const tracer = setupTracing('water-api', '0.0.1');
+import { getRandomNumber } from './dice';
 
 import express, { Express, Response } from 'express';
 import { getLogger } from './logger';
 
 const logger = getLogger();
-setupTracing('water-api', '0.0.1');
 
 const PORT: number = parseInt(process.env.PORT || '8080');
 const app: Express = express();
