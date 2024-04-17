@@ -6,7 +6,7 @@ export const options = {
   // A number specifying the number of VUs to run concurrently.
   vus: 5,
   // A string specifying the total duration of the test run.
-  duration: '5m',
+  duration: '1m',
 
   // The following section contains configuration options for execution of this
   // test script in Grafana Cloud.
@@ -59,14 +59,15 @@ export default function () {
   const url = new URL('http://localhost:8092/api/water/search/findBySize');
   url.searchParams.append('size', size);
   http.get(url.toString());
-  sleep(getSleep());
+  //sleep(getSleep());
 }
 
 function getSize() {
   const rand = Math.random();
   if (rand < 0.1) return 'small';
   else if (rand < 0.7) return 'medium';
-  else  return 'large';
+  else if(rand < 0.5) return 'large'
+  else return 'extra-large';
 }
 
 function getSleep() {
