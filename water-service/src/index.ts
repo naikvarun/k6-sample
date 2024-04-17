@@ -1,4 +1,5 @@
 /*app.ts*/
+import 'dotenv/config'
 import { setupTracing } from './instrumentation';
 const tracer = setupTracing('water-api', '0.0.1');
 import { app } from './app';

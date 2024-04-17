@@ -2,7 +2,25 @@ version: '3.8'
 volumes:
   prometheus:
   tempo:
+  pgdata:
+
 services:
+  pg:
+    container_name: pg
+    image: postgres
+    environment:
+      POSTGRES_USER: k6sample
+      POSTGRES_PASSWORD: 'k6pass'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/pg/initd:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+  adminer:
+    container_name: adminer
+    image: adminer
+    ports:
+      - 18888:8080
   otel-collector:
     container_name: otel-collector
     image: otel/opentelemetry-collector-contrib

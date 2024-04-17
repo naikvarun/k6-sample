@@ -4,6 +4,9 @@
   "description": "",
   "main": "dist/app.js",
   "scripts": {
+    "db:gen": "drizzle-kit generate:pg",
+    "db:push": "drizzle-kit push:pg",
+    "db:seed": "npx tsx ./drizzle/seed/index.ts",
     "api": "npx tsx ./src/app.ts",
     "api:instr": "npx ts-node ./src/index.ts",
     "build": "npx tsc",
@@ -15,6 +18,7 @@
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.12.7",
+    "drizzle-kit": "^0.20.14",
     "tsx": "^4.7.2",
     "typescript": "^5.4.5"
   },
@@ -29,8 +33,12 @@
     "@opentelemetry/sdk-metrics": "^1.23.0",
     "@opentelemetry/sdk-node": "^0.50.0",
     "@opentelemetry/sdk-trace-node": "^1.23.0",
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.30.8",
     "express": "^4.19.2",
     "express-async-errors": "^3.1.1",
+    "nanoid": "^5.0.7",
+    "postgres": "^3.4.4",
     "ts-node": "^10.9.2",
     "winston": "^3.13.0",
     "winston-loki": "^6.1.1"

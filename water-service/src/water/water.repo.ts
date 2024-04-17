@@ -1,20 +1,33 @@
 import { Water, WaterId, WaterSize } from "./water.model";
-
-const allWaters: {[key: WaterId]: Water} = {
-    '1': {id: '1',amount: '100 ml',size: 'small'},
-    '2': {id: '2', amount: '200 ml', size: 'medium'},
-    '3': {id: '3', amount: '300 ml',size: 'large'}
-}
+import {db} from '../db/index'
+import {water} from '../db/schema'
+import { eq } from "drizzle-orm";
+import { getLogger } from "../logger";
+const logger = getLogger();
 
 export async function findAll(): Promise<Water[]> {
-    return Object.values(allWaters)
+    return db.select().from(water);
 }
 export async function findById(id: WaterId): Promise<Water|undefined> {
-    return id in allWaters?  allWaters[id] : undefined;
+    const w = await db.select().from(water).where(eq(water.id, id.toUpperCase()));
+    if(w.length >= 1) {
+        logger.warn(`Got water in db by id='${id}`)
+        return w[0]
+    } else {
+        logger.warn(`No water in db by id='${id}`)
+        return undefined;
+    }
 }
 
 export async function searchBySize(size:WaterSize): Promise<Water|undefined> {
-    return Object.values(allWaters).find(w=>w.size===size)
+    const w = await db.select().from(water).where(eq(water.size, size)).limit(1);
+    if(w.length >= 1) {
+        logger.warn(`Got water in db by size='${size}`)
+        return w[0]
+    }else {
+        logger.warn(`No water in db by size='${size}`)
+        return undefined
+    }
 }
 
 export const waterRepo = {findAll, findById, searchBySize}
