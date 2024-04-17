@@ -5,7 +5,7 @@
   "main": "dist/app.js",
   "scripts": {
     "api": "npx tsx ./src/app.ts",
-    "api:instr": "npx ts-node -r ./src/instrumentation.ts -r ./src/app.ts",
+    "api:instr": "npx ts-node -r ./src/instrumentation.ts  ./src/app.ts",
     "build": "npx tsc",
     "start": "node -r ./dist/instrumentation.js -r  ./dist/app.js"
   },

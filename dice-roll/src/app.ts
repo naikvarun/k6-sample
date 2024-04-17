@@ -1,7 +1,8 @@
 /*app.ts*/
 import { getRandomNumber } from './dice';
 import { setupTracing } from './instrumentation';
-const tracer = setupTracing('water-api', '0.0.1');
+
+setupTracing('water-api', '0.0.1');
 
 import express, { Express, Response } from 'express';
 const PORT: number = parseInt(process.env.PORT || '8080');

@@ -28,6 +28,8 @@ const Exporter = (process.env.EXPORTER || '').toLowerCase().startsWith('z')
   ? ZipkinExporter
   : OTLPTraceExporter;
 
+// const serviceName = 'water-api';
+// const serviceVersion = '0.0.1';
 export function setupTracing(serviceName: string, serviceVersion: string) {
   const resource = new Resource({
     [SEMRESATTRS_SERVICE_NAME]: serviceName,
@@ -69,6 +71,14 @@ export function setupTracing(serviceName: string, serviceVersion: string) {
   sdk.start();
 
   process.on('SIGTERM', () => {
+    provider
+      .shutdown()
+      .then(() => console.log(`provider shutdown`))
+      .catch((err) => console.log('Error shutting down ', err));
+    metricReader
+      .shutdown()
+      .then(() => console.log(`Metric reader shutdown`))
+      .catch((err) => console.log('Error shutting down metric reader', err));
     sdk
       .shutdown()
       .then(
