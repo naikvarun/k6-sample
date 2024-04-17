@@ -30,7 +30,9 @@
     "@opentelemetry/sdk-node": "^0.50.0",
     "@opentelemetry/sdk-trace-node": "^1.23.0",
     "express": "^4.19.2",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "winston": "^3.13.0",
+    "winston-loki": "^6.1.1"
   },
   "workspaces": [
     "dice-roll"
