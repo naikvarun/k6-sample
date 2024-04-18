@@ -1,0 +1,9 @@
+
+GET http://localhost:8091/api/tealeaves
+
+###
+
+GET http://localhost:8092/api/tealeaves/K8GINYK7V2
+###
+
+GET http://localhost:8091/api/tealeaves/search/findByType?type=green

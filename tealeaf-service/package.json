@@ -1,5 +1,5 @@
 {
-  "name": "@k6-sample/water-service",
+  "name": "@k6-sample/tea-service",
   "version": "1.0.0",
   "description": "",
   "main": "dist/app.js",

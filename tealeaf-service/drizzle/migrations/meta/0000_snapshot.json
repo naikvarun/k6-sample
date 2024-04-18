@@ -1,0 +1,77 @@
+{
+  "id": "91045eaa-12c7-4f6c-ba4b-f79351ca87e0",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "tealeaf": {
+      "name": "tealeaf",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "suggested_amount": {
+          "name": "suggested_amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "steeping_time": {
+          "name": "steeping_time",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "water_temperature": {
+          "name": "water_temperature",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "waterSize",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "tealeaf_name_unique": {
+          "name": "tealeaf_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      }
+    }
+  },
+  "enums": {
+    "waterSize": {
+      "name": "waterSize",
+      "values": {
+        "green": "green",
+        "black": "black"
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

@@ -2,6 +2,8 @@
   "cSpell.words": [
     "opentelemetry",
     "OTLP",
-    "SEMRESATTRS"
+    "proto",
+    "SEMRESATTRS",
+    "tealeaf"
   ]
 }

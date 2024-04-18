@@ -9,6 +9,7 @@
   "workspaces": [
     "./dice-roll",
     "load-gen",
-    "water-service"
+    "water-service",
+    "tealeaf-service"
   ]
 }

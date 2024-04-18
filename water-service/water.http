@@ -3,7 +3,7 @@ GET http://localhost:8092/api/water
 
 ###
 
-GET http://localhost:8092/api/water/R952EVLJKM
+GET http://localhost:8092/api/water/K8GINYK7V2
 ###
 
-GET http://localhost:8092/api/water/search/findBySize?size=small
+GET http://localhost:8092/api/water/search/findBySize?size=smallx
