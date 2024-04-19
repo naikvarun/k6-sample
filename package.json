@@ -10,6 +10,8 @@
     "./dice-roll",
     "load-gen",
     "water-service",
-    "tealeaf-service"
+    "tealeaf-service",
+    "tea-service",
+    "tea-frontend"
   ]
 }

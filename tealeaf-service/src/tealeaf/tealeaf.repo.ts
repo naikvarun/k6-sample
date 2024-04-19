@@ -34,10 +34,10 @@ export async function searchByType(
     .where(eq(tealeaf.type, type))
     .limit(1);
   if (w.length >= 1) {
-    logger.warn(`Got water in db by size='${type}`);
+    logger.warn(`Got tealeaf in db by size='${type}`);
     return w[0];
   } else {
-    logger.warn(`No water in db by size='${type}`);
+    logger.warn(`No tealeaf in db by size='${type}`);
     return undefined;
   }
 }
@@ -50,10 +50,10 @@ export async function searchByName(name: string): Promise<TeaLeaf | undefined> {
     .where(eq(tealeaf.name, name))
     .limit(1);
   if (w.length >= 1) {
-    logger.warn(`Got water in db by name='${name}`);
+    logger.info(`Got tealeaf in db by name='${name}`);
     return w[0];
   } else {
-    logger.warn(`No water in db by name='${name}`);
+    logger.warn(`No tealeaf in db by name='${name}`);
     return undefined;
   }
 }

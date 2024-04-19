@@ -1,0 +1,9 @@
+
+GET http://localhost:8090/api/tea/make?name=sencha&size=small
+###
+GET http://localhost:8090/api/steep
+
+###
+GET http://localhost:8090/health
+
+###

@@ -1,0 +1,14 @@
+[
+  {
+    "name": "water-api",
+    "listen": "[::]:18092",
+    "upstream": "host.docker.internal:8092",
+    "enabled": true
+  },
+  {
+    "name": "tealeaf-api",
+    "listen": "[::]:18091",
+    "upstream": "host.docker.internal:8091",
+    "enabled": true
+  }
+]

@@ -7,7 +7,8 @@
   "scripts": {
     "start": "k6 run script.js",
     "load:water": "k6 run water-service.js",
-    "load:tealeaf": "k6 run tealeaf-service.js"
+    "load:tealeaf": "k6 run tealeaf-service.js",
+    "load:tea": "k6 run tea-service.js"
   },
   "keywords": [],
   "author": "",
