@@ -44,6 +44,7 @@ export async function makeTea(
       id: teaLeaf.id,
       name: teaLeaf.name,
       amount: teaLeaf.suggestedAmount,
+      type: teaLeaf.type
     },
     steepingTime: teaLeaf.steepingTime,
   };

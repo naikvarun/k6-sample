@@ -5,6 +5,15 @@
   "private": true,
   "keywords": [],
   "author": "",
+  "scripts": {
+    "db:ins:eng": "npm -w tealeaf-service run db:eng:ins",
+    "db:del:eng": "npm -w tealeaf-service run db:eng:del",
+    "start:water": "npm -w water-service run api:instr",
+    "start:tealeaf": "npm -w tealeaf-service run api:instr",
+    "start:tea": "npm -w tea-service run api:instr",
+    "start:ui": "npm -w tea-frontend run dev",
+    "start:load": "npm -w load-gen run load:tea"
+  },
   "license": "ISC",
   "workspaces": [
     "./dice-roll",

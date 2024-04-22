@@ -2,6 +2,7 @@ export type TeaLeaf = {
   id: string;
   name: string;
   amount: string;
+  type: string
 };
 
 export type Water = {
