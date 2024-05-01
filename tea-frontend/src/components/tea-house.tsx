@@ -6,7 +6,7 @@ import { useState, useEffect} from 'react'
 import { Separator } from "./ui/separator";
 import TeaResult from "./tea-result";
 function TeaHouse() {
-    const [tea, setTea] = useState<string[]>( []);
+    const [tea, setTea] = useState<{name: string, type: string}[]>( []);
     const [waterAmount, setWaterAmount] = useState<{amount: string, size: string}[]>([ ])
     const [selectedTea, setSelectedTea] = useState<string>('');
     const [selectedAmount, setSelectedAmount] = useState<string>('')
@@ -18,7 +18,7 @@ function TeaHouse() {
         fetch('http://localhost:8090/api/steep')
         .then(response => response.json())
         .then(data => {
-            setTea(data.teaLeaves.map(t=>t.name))
+            setTea(data.teaLeaves.map(t=>({name: t.name, type: t.type})))
             setWaterAmount(data.water.map(w=>({size: w.size, amount: w.amount})))
 
         })
@@ -64,9 +64,9 @@ function TeaHouse() {
       </SelectTrigger>
       <SelectContent>
         {
-            tea.filter(t => t !== 'english breakfast').map((t: string, i: number) => <SelectItem value={t} key={i}>{t}</SelectItem>)
+            tea.filter(t => t.name !== 'english breakfast').map((t, i: number) => <SelectItem value={t.name} key={i}>{t.name} ({t.type})</SelectItem>)
         }
-         <SelectItem value="english breakfast">english breakfast (!)</SelectItem>
+         <SelectItem value="english breakfast">english breakfast (black)</SelectItem>
           
       </SelectContent>
     </Select>

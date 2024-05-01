@@ -22,7 +22,7 @@ function TeaSteps({result}: {result: any})  {
     return  <div className="w-64">
     <TeaStep title="Steeping Time" value={`${result.steepingTime} min`} />
     <TeaStep title="Water Amount" value={`${result.water.amount}`} />
-    <TeaStep title="Water Tempreture" value={`${result.water.temperature} C`} />
+    <TeaStep title="Water Tempreture" value={`${result.water.temperature} °C`} />
     <TeaStep title="Tea Leaves Name" value={result.teaLeaf.name} />
     <TeaStep title="Tea Leaves Type" value={result.teaLeaf.type} />
     <TeaStep title="Tea Leaves Type" value={`${result.teaLeaf.amount} g`} />
