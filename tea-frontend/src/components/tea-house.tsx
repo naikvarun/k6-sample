@@ -53,10 +53,8 @@ function TeaHouse() {
 
     return <><Card>
         <CardContent  >
-        <div className="flex content-center justify-center p-3 gap-5">
-            <div>
+        <div className="flex flex-wrap content-center justify-center p-3 gap-5">
             <Label>Tea Leaf</Label>
-            </div>
             <div  className="w-64">
         <Select value={selectedTea} onValueChange={(e) => setSelectedTea(e)}>
       <SelectTrigger>
