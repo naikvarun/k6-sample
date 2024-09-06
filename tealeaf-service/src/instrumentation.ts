@@ -25,6 +25,10 @@ import { PrometheusExporter } from '@opentelemetry/exporter-prometheus';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { PgInstrumentation } from '@opentelemetry/instrumentation-pg';
+import {LoggerProvider, SimpleLogRecordProcessor, ConsoleLogRecordExporter} from '@opentelemetry/sdk-logs'
+import {logs} from '@opentelemetry/api-logs'
+import {WinstonInstrumentation} from '@opentelemetry/instrumentation-winston'
+
 const Exporter = (process.env.EXPORTER || '').toLowerCase().startsWith('z')
   ? ZipkinExporter
   : OTLPTraceExporter;
@@ -47,6 +51,13 @@ export function setupTracing(serviceName: string, serviceVersion: string) {
   });
 
   provider.addSpanProcessor(new SimpleSpanProcessor(exporter));
+
+  const loggerProvider = new LoggerProvider()
+  loggerProvider.addLogRecordProcessor(
+    new SimpleLogRecordProcessor(new ConsoleLogRecordExporter()),
+  )
+  logs.setGlobalLoggerProvider(loggerProvider);
+
 
   // Initialize the OpenTelemetry APIs to use the NodeTracerProvider bindings
   provider.register();
@@ -77,6 +88,7 @@ export function setupTracing(serviceName: string, serviceVersion: string) {
       new HttpInstrumentation(),
       new ExpressInstrumentation(),
       new PgInstrumentation(),
+      new WinstonInstrumentation()
     ],
   });
 

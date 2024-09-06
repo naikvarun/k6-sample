@@ -5,6 +5,7 @@ import { Resource } from '@opentelemetry/resources';
 import {
   SEMRESATTRS_SERVICE_NAME,
   SEMRESATTRS_SERVICE_VERSION,
+  SemanticResourceAttributes
 } from '@opentelemetry/semantic-conventions';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
@@ -25,6 +26,15 @@ import { PrometheusExporter } from '@opentelemetry/exporter-prometheus';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { PgInstrumentation } from '@opentelemetry/instrumentation-pg';
+import {LoggerProvider, BatchLogRecordProcessor,SimpleLogRecordProcessor, ConsoleLogRecordExporter} from '@opentelemetry/sdk-logs'
+import {logs} from '@opentelemetry/api-logs'
+import {WinstonInstrumentation} from '@opentelemetry/instrumentation-winston'
+import {OTLPLogExporter} from "@opentelemetry/exporter-logs-otlp-http";
+import {
+  SEMRESATTRS_DEPLOYMENT_ENVIRONMENT
+} from "@opentelemetry/semantic-conventions/build/src/resource/SemanticResourceAttributes";
+// import {OTLPLogExporter} from '@opentelemetry/exporter-logs-otlp-http'
+
 const Exporter = (process.env.EXPORTER || '').toLowerCase().startsWith('z')
   ? ZipkinExporter
   : OTLPTraceExporter;
@@ -35,16 +45,32 @@ export function setupTracing(serviceName: string, serviceVersion: string) {
   const resource = new Resource({
     [SEMRESATTRS_SERVICE_NAME]: serviceName,
     [SEMRESATTRS_SERVICE_VERSION]: serviceVersion,
+    [SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: 'demo'
   });
 
+  console.log(resource)
   const provider = new NodeTracerProvider({
-    resource,
+   resource,
     // sampler: filterSampler(ignoreHealthCheck, new AlwaysOnSampler()),
   });
 
   const exporter = new Exporter({
     serviceName,
   });
+
+  const loggerProvider = new LoggerProvider()
+  /*const collectorOptions = {
+    // url: '<opentelemetry-collector-url>', // url is optional and can be omitted - default is http://localhost:4318/v1/logs
+    headers: {}, // an optional object containing custom headers to be sent with each request
+    concurrencyLimit: 1, // an optional limit on pending requests
+  };*/
+  // const logExporter = new OTLPLogExporter(collectorOptions);
+  loggerProvider.addLogRecordProcessor(
+    new SimpleLogRecordProcessor(new OTLPLogExporter()),
+    // new BatchLogRecordProcessor(logExporter)
+  )
+  logs.setGlobalLoggerProvider(loggerProvider);
+
 
   provider.addSpanProcessor(new SimpleSpanProcessor(exporter));
 
@@ -57,6 +83,7 @@ export function setupTracing(serviceName: string, serviceVersion: string) {
       }), */
       new ExpressInstrumentation({}),
       new PgInstrumentation(),
+
     ],
   });
   const metricReader = new PeriodicExportingMetricReader({
@@ -77,6 +104,9 @@ export function setupTracing(serviceName: string, serviceVersion: string) {
       new HttpInstrumentation(),
       new ExpressInstrumentation(),
       new PgInstrumentation(),
+      new WinstonInstrumentation({
+
+      }),
     ],
   });
 

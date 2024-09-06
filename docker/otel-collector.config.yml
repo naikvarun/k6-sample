@@ -43,7 +43,7 @@ receivers:
 
 processors:
   batch:
-    send_batch_max_size: 100
+    send_batch_max_size: 512
     send_batch_size: 10
     timeout: 10s
 
@@ -51,10 +51,12 @@ connectors:
   datadog/connector:
 
 exporters:
+  debug:
+    verbosity: detailed
   datadog:
     api:
       site: us5.datadoghq.com
-      key: e05819be75d28c28111e185087e27988
+      key: dd_api
 
 service:
   pipelines:
@@ -67,6 +69,6 @@ service:
       processors: [batch]
       exporters: [datadog]
     logs:
-      receivers: [otlp, filelog]
+      receivers: [otlp]
       processors: [batch]
-      exporters: [datadog]
+      exporters: [datadog, debug]
