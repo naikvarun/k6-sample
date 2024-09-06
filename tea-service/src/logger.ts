@@ -7,6 +7,8 @@ const serviceLabelFormat = () => {
   return winston.format(info => {
     info['app.name'] = appConfig.AppName
     info['app.version'] = appConfig.AppVersion
+    info['service.name'] = appConfig.AppName
+    info['service.version'] = appConfig.AppVersion
     return info
   })()
 }
@@ -19,6 +21,7 @@ const datadogTracingFormat = () => {
       const traceIdEnd = traceId.slice(traceId.length / 2);
       info['dd.trace_id'] = BigInt(`0x${traceIdEnd}`).toString();
       info['dd.span_id'] = BigInt(`0x${spanId}`).toString();
+      info['dd.service'] = appConfig.AppName
     }
 
     return info

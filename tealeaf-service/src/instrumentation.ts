@@ -28,6 +28,7 @@ import { PgInstrumentation } from '@opentelemetry/instrumentation-pg';
 import {LoggerProvider, SimpleLogRecordProcessor, ConsoleLogRecordExporter} from '@opentelemetry/sdk-logs'
 import {logs} from '@opentelemetry/api-logs'
 import {WinstonInstrumentation} from '@opentelemetry/instrumentation-winston'
+import {OTLPLogExporter} from "@opentelemetry/exporter-logs-otlp-http";
 
 const Exporter = (process.env.EXPORTER || '').toLowerCase().startsWith('z')
   ? ZipkinExporter
@@ -54,7 +55,7 @@ export function setupTracing(serviceName: string, serviceVersion: string) {
 
   const loggerProvider = new LoggerProvider()
   loggerProvider.addLogRecordProcessor(
-    new SimpleLogRecordProcessor(new ConsoleLogRecordExporter()),
+    new SimpleLogRecordProcessor(new OTLPLogExporter()),
   )
   logs.setGlobalLoggerProvider(loggerProvider);
 

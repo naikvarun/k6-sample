@@ -13,6 +13,7 @@ const datadogTracingFormat = () => {
       const traceIdEnd = traceId.slice(traceId.length / 2);
       info['dd.trace_id'] = BigInt(`0x${traceIdEnd}`).toString();
       info['dd.span_id'] = BigInt(`0x${spanId}`).toString();
+      info['dd.service'] = 'water-service'
     }
 
     return info
