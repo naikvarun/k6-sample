@@ -1,42 +1,72 @@
 receivers:
   otlp:
     protocols:
-      grpc:
-        endpoint: 0.0.0.0:4317
       http:
         endpoint: 0.0.0.0:4318
-exporters:
-  debug:
-    verbosity: detailed
-  otlp:
-    endpoint: tempo:4317
-    tls:
-      insecure: true
+      grpc:
+        endpoint: 0.0.0.0:4317
+  # The hostmetrics receiver is required to get correct infrastructure metrics in Datadog.
+  hostmetrics:
+    collection_interval: 10s
+    scrapers:
+      paging:
+        metrics:
+          system.paging.utilization:
+            enabled: true
+      cpu:
+        metrics:
+          system.cpu.utilization:
+            enabled: true
+      disk:
+      filesystem:
+        metrics:
+          system.filesystem.utilization:
+            enabled: true
+      load:
+      memory:
+      network:
+      processes:
+  # The prometheus receiver scrapes metrics needed for the OpenTelemetry Collector Dashboard.
   prometheus:
-    endpoint: '0.0.0.0:8889'
-    const_labels:
-      exp: otlp
+    config:
+      scrape_configs:
+        - job_name: 'otelcol'
+          scrape_interval: 10s
+          static_configs:
+            - targets: ['0.0.0.0:8888']
 
-extensions:
-  health_check:
-  pprof:
-  zpages:
+  filelog:
+    include_file_path: true
+    poll_interval: 500ms
+    include:
+      - /var/log/**/*example*/*.log
 
 processors:
   batch:
+    send_batch_max_size: 100
+    send_batch_size: 10
+    timeout: 10s
+
+connectors:
+  datadog/connector:
+
+exporters:
+  datadog:
+    api:
+      site: us5.datadoghq.com
+      key: e05819be75d28c28111e185087e27988
 
 service:
-  extensions: [health_check, pprof, zpages]
   pipelines:
+    metrics:
+      receivers: [hostmetrics, prometheus, otlp]
+      processors: [batch]
+      exporters: [datadog]
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp, debug]
-    metrics:
-      receivers: [otlp]
-      processors: [batch]
-      exporters: [debug, prometheus]
+      exporters: [datadog]
     logs:
-      receivers: [otlp]
+      receivers: [otlp, filelog]
       processors: [batch]
-      exporters: [otlp, debug]
+      exporters: [datadog]
