@@ -1,7 +1,7 @@
-e05819be75d28c28111e185087e27988
+
 
 ```shell
-DD_API_KEY=3a67b96622ce7379900107a0d36c1a46 
+DD_API_KEY= 
 DD_SITE="us5.datadoghq.com"
 bash -c "$(curl -L https://install.datadoghq.com/scripts/install_mac_os.sh)"
 ```
