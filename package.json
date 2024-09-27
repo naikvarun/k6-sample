@@ -12,6 +12,7 @@
     "water-service",
     "tealeaf-service",
     "tea-service",
-    "tea-frontend"
+    "tea-frontend",
+    "data-flows"
   ]
 }

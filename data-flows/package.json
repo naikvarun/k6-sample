@@ -1,0 +1,18 @@
+{
+  "name": "@k6-sample/data-flows",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "dev:seed": "ts-node src/seed/index.ts"
+  },
+  "keywords": [],
+  "author": "Varun Naik <nkvrn85@gmail.com>",
+  "license": "MIT",
+  "description": "",
+  "devDependencies": {
+    "@faker-js/faker": "^9.0.2",
+    "@types/node": "^22.6.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  }
+}
