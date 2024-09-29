@@ -23,10 +23,12 @@ export type StagedUser = {
   created_at: Date,
   updated_at: Date,
   name: string,
+  gender: string,
   title: string,
   age: number,
   email: string,
   telephone: string,
+  occupation: string
 }
 
 export type Product = {

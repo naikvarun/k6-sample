@@ -13,6 +13,8 @@ export async function stage_users(){
     age: user.age,
     email: user.email,
     telephone: user.telephone,
+    gender: user.gender,
+    occupation: user.occupation
   }));
   return writeStageFile(`data/stage/users.json`, stagedUsers);
 }

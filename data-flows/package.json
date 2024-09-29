@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "dev:seed": "ts-node src/seed/index.ts",
-    "dev:data": "ts-node src/stage/index.ts"
+    "dev:data": "ts-node src/stage/index.ts",
+    "dev:mart": "ts-node src/mart/index.ts",
+    "dev:pipe": "ts-node src/index.ts"
   },
   "keywords": [],
   "author": "Varun Naik <nkvrn85@gmail.com>",
@@ -17,6 +19,7 @@
     "typescript": "^5.6.2"
   },
   "dependencies": {
+    "@opentelemetry/sdk-node": "^0.53.0",
     "winston": "^3.14.2"
   }
 }

@@ -4,14 +4,14 @@ import fs from "node:fs/promises";
 
 const logger = getLogger();
 export async function stage_purchases(){
-  const rawPurchases = await readRaw('data/raw/user_purchase.json');
+  const rawPurchases = await readRaw('data/raw/user-purchase.json');
   logger.info(`Reading ${rawPurchases.length} purchases`);
-  let stagedPurchases = rawPurchases.map((user: Purchase): StagedPurchase => ({...user}));
-  return writeStageFile(`data/stage/users.json`, stagedPurchases);
+  let stagedPurchases = rawPurchases.reduce((acc, purchase: Purchase[]) => ([...acc, ...purchase]), []);
+  return writeStageFile(`data/stage/purchases.json`, stagedPurchases);
 }
 
 
-async function readRaw(fileName: string): Promise<Purchase[]> {
+async function readRaw(fileName: string): Promise<Purchase[][]> {
   logger.info(`Reading raw data from ${fileName}`);
   const rawData = await fs.readFile(fileName, 'utf8');
   return JSON.parse(rawData);
