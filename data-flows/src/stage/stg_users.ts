@@ -1,22 +1,26 @@
 import {getLogger} from "../app.logger";
 import {StagedUser, User} from "../data-types";
 import fs from "node:fs/promises";
+import {getTracer} from "../../instrumentation";
 
 const logger = getLogger();
+const appTracer = getTracer('data-flow', '0.0.1');
+
 export async function stage_users(){
-  const rawUsers = await readRaw('data/raw/users.json');
-  logger.info(`Reading ${rawUsers.length} users`);
-  let stagedUsers = rawUsers.map((user: User): StagedUser => ({
-    id: user.id, created_at: user.created_at, updated_at: user.updated_at,
-    name: user.name,
-    title: user.title,
-    age: user.age,
-    email: user.email,
-    telephone: user.telephone,
-    gender: user.gender,
-    occupation: user.occupation
-  }));
-  return writeStageFile(`data/stage/users.json`, stagedUsers);
+    const rawUsers = await readRaw('data/raw/users.json');
+    logger.info(`Reading ${rawUsers.length} users`);
+    let stagedUsers = rawUsers.map((user: User): StagedUser => ({
+      id: user.id, created_at: user.created_at, updated_at: user.updated_at,
+      name: user.name,
+      title: user.title,
+      age: user.age,
+      email: user.email,
+      telephone: user.telephone,
+      gender: user.gender,
+      occupation: user.occupation
+    }));
+    await writeStageFile(`data/stage/users.json`, stagedUsers);
+
 }
 
 
