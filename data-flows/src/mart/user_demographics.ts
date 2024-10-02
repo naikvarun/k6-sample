@@ -2,7 +2,7 @@ import { StagedUser} from "../data-types";
 import fs from "node:fs/promises";
 import {getLogger} from "../app.logger";
 
-const logger = getLogger();
+const logger = getLogger('user_demographics');
 export async function user_demographics() {
   logger.info(`Reading staged users`);
   const users = await readRaw('data/stage/users.json');

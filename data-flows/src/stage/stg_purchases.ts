@@ -2,7 +2,7 @@ import {getLogger} from "../app.logger";
 import {Purchase, StagedPurchase, StagedUser, User} from "../data-types";
 import fs from "node:fs/promises";
 
-const logger = getLogger();
+const logger = getLogger('stg-purchases');
 export async function stage_purchases(){
   const rawPurchases = await readRaw('data/raw/user-purchase.json');
   logger.info(`Reading ${rawPurchases.length} purchases`);

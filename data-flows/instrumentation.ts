@@ -8,18 +8,27 @@ import {
 } from '@opentelemetry/sdk-trace-base';
 import {trace} from "@opentelemetry/api";
 import {LoggerProvider, SimpleLogRecordProcessor, ConsoleLogRecordExporter} from '@opentelemetry/sdk-logs'
-
+import {NodeTracerProvider} from'@opentelemetry/sdk-trace-node'
 import {logs} from '@opentelemetry/api-logs'
 import {WinstonInstrumentation} from "@opentelemetry/instrumentation-winston";
-const exporter = new OTLPTraceExporter()
+
 
 export const setupTracing = (serviceName: string, serviceVersion: string) => {
+  const resource = new Resource({
+    [ATTR_SERVICE_NAME]: serviceName,
+    [ATTR_SERVICE_VERSION]: serviceVersion,
+  })
 
+
+  const logExporter = new OTLPLogExporter();
+  // const logExporter = new ConsoleLogRecordExporter();
+  const loggerProvider = new LoggerProvider();
+
+  loggerProvider.addLogRecordProcessor( new SimpleLogRecordProcessor(logExporter));
+  logs.setGlobalLoggerProvider(loggerProvider);
+  const exporter = new OTLPTraceExporter()
   const sdk = new NodeSDK({
-    resource: new Resource({
-      [ATTR_SERVICE_NAME]: serviceName,
-      [ATTR_SERVICE_VERSION]: serviceVersion,
-    }),
+    resource,
     spanProcessors: [new SimpleSpanProcessor(exporter)],
     traceExporter: exporter,
     instrumentations: [
@@ -33,17 +42,10 @@ export const setupTracing = (serviceName: string, serviceVersion: string) => {
     ]
   });
 
-  const logExporter = new OTLPLogExporter();
-  // const logExporter = new ConsoleLogRecordExporter();
-  const loggerProvider = new LoggerProvider();
-
-  loggerProvider.addLogRecordProcessor( new SimpleLogRecordProcessor(logExporter));
-  logs.setGlobalLoggerProvider(loggerProvider);
-
 
   sdk.start();
 }
 
 export const getTracer = (serviceName: string, serviceVersion: string) => {
-  return trace.getTracer('default');
+  return trace.getTracer(serviceName, serviceVersion);
 }

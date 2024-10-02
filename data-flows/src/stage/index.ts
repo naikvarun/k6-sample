@@ -6,7 +6,7 @@ import {withTracing} from "../app-tracing";
 
 export async function stage() {
   const allProcess = [
-    withTracing( stage_users, 'stage-users)'),
+    withTracing( stage_users, 'stage-users'),
     withTracing(stage_products, 'stage-products'),
     withTracing(stage_purchases, 'stage_purchases'),
   ]

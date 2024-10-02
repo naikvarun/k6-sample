@@ -3,7 +3,7 @@ import {StagedUser, User} from "../data-types";
 import fs from "node:fs/promises";
 import {getTracer} from "../../instrumentation";
 
-const logger = getLogger();
+const logger = getLogger('stage-users');
 const appTracer = getTracer('data-flow', '0.0.1');
 
 export async function stage_users(){

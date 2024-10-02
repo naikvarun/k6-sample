@@ -2,7 +2,7 @@ import {StagedPurchase} from "../data-types";
 import fs from "node:fs/promises";
 import {getLogger} from "../app.logger";
 
-const logger = getLogger();
+const logger = getLogger('purchase_patterns');
 
 function getDaysDifference(purchased_at: Date | undefined, added_to_cart: Date) {
   if (!purchased_at) {

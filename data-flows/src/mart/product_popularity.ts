@@ -2,7 +2,7 @@ import {StagedProduct} from "../data-types";
 import fs from "node:fs/promises";
 import {getLogger} from "../app.logger";
 
-const logger = getLogger();
+const logger = getLogger('product-popularity');
 export async function product_popularity() {
   logger.info(`Reading staged products`);
   const products = await readRaw('data/stage/products.json');
