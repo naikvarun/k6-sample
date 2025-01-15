@@ -14,5 +14,13 @@
     "tea-service",
     "tea-frontend",
     "data-flows"
-  ]
+  ],
+  "scripts": {
+    "api:tea": "cd tea-service && npm run api:instr",
+    "api:water": "cd water-service && npm run api:instr",
+    "api:tealeaf": "cd tealeaf-service && npm run api:instr",
+    "frontend": "cd tea-frontend && npm run dev",
+    "load-gen": "cd load-gen && npm run load:tea",
+    "pipe": "cd data-flows && npm run dev:pipe"
+  }
 }
