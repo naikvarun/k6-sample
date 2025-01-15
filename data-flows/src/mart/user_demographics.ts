@@ -35,7 +35,7 @@ async function readRaw(fileName: string): Promise<StagedUser[]> {
 }
 
 async function writeMartFile(fileName: string, martData: {title: string, gender: string, user_count: number, average_age: number}[]) {
-  logger.info(`Writing stage file ${fileName} with ${martData.length} records`);
+  logger.info(`Writing mart file ${fileName} with ${martData.length} records`);
   return fs.writeFile(fileName, JSON.stringify(martData, null, 2), 'utf8');
 }
 

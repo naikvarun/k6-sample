@@ -1,5 +1,6 @@
 import {getTracer} from "../instrumentation";
 import {SpanStatusCode} from "@opentelemetry/api";
+import {sleepRandom} from "./util";
 
 const appTracer = getTracer('data-pipe', '0.1.0');
 export const withTracing = async (func: any, trace: string) => {
@@ -7,7 +8,8 @@ export const withTracing = async (func: any, trace: string) => {
     let statusCode: SpanStatusCode;
     let spanMessage = 'done'
     try {
-      await func();
+      await sleepRandom()
+      await func(span);
       statusCode = SpanStatusCode.OK;
     } catch (e: unknown) {
       statusCode = SpanStatusCode.ERROR;

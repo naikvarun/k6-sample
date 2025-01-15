@@ -1,12 +1,17 @@
 import {getLogger} from "../app.logger";
 import {Product, StagedProduct} from "../data-types";
 import fs from "node:fs/promises";
+import {getCounter} from "../../instrumentation";
 
 const logger = getLogger('stage-products');
+const inputCounter = getCounter('stage-products.input')
+const outputCounter = getCounter('stage-products.output')
 export async function stage_products(){
   const rawProducts = await readRaw('data/raw/products.json');
   logger.info(`Reading ${rawProducts.length} products`);
   const stagedProducts = rawProducts.map((product: Product): StagedProduct => ({...product}))
+  inputCounter.add(rawProducts.length )
+  outputCounter.add(stagedProducts.length)
   return writeStageFile(`data/stage/products.json`, stagedProducts);
 }
 

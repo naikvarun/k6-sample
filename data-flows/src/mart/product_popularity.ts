@@ -39,7 +39,7 @@ async function readRaw(fileName: string): Promise<StagedProduct[]> {
 }
 
 async function writeMartFile(fileName: string, martData:  { id: number,   name: string   ,type: string  ,purchase_count: number}[]) {
-  logger.info(`Writing stage file ${fileName} with ${martData.length} records`);
+  logger.info(`Writing mart file ${fileName} with ${martData.length} records`);
   return fs.writeFile(fileName, JSON.stringify(martData, null, 2), 'utf8');
 }
 
